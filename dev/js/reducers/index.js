@@ -1,6 +1,4 @@
 import {combineReducers} from 'redux';
-import UserReducer from './reducer-users';
-import ActiveUserReducer from './reducer-active-user';
 import PostsReducer from "./PostsReducer";
 import NewPostReducer from "./NewPostReducer";
 import EditPostReducer from "./EditPostReducer";
@@ -11,8 +9,6 @@ import EditPostReducer from "./EditPostReducer";
  * */
 
 const allReducers = combineReducers({
-    users: UserReducer,
-    activeUser: ActiveUserReducer,
     posts: PostsReducer,
     newPost: NewPostReducer,
     editPost: EditPostReducer,

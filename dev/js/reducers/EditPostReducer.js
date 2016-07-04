@@ -3,6 +3,7 @@ const initialState = {
     updating: false,
     updated: false,
     updateError: false,
+    updateErrorMessage: "",
     post: {}
 }
 
@@ -32,6 +33,16 @@ export default function(state = initialState, action){
                 newUpdate: false,
                 updated: true,
                 updating: false,
+            }
+        }
+        case 'UPDATE_POST_ERROR':{
+            return {
+                ...state,
+                newUpdate: false,
+                updated:false,
+                updating: false,
+                updateError: true,
+                updateErrorMessage: action.payload
             }
         }
     }

@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {updatePostClicked, cancelUpdatePost, updatePost, updateKeyPressed} from "../actions/index";
+import Snackbar from 'material-ui/Snackbar';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -59,12 +60,17 @@ class NewPostDialog extends Component {
         ];
         return (
             <div>
+                <Snackbar
+                open={this.props.editPost.updateError}
+                message="There was an error updating the post."
+                autoHideDuration={4000}
+                onRequestClose={this.handleRequestClose}
+                />
                 <Dialog
                 title="Update Post"
                 actions={actions}
                 modal={false}
                 open={this.props.editPost.newUpdate}
-                onRequestClose={this.handleClose}
                 defaultValue={text}
                 >
                     <TextField

@@ -1,13 +1,5 @@
 import axios from "axios";
 
-export const selectUser = (user) => {
-    console.log("You clicked on user: ", user.first);
-    return {
-        type: 'USER_SELECTED',
-        payload: user
-    }
-};
-
 export const newPostClicked = function(){
     console.log("You clicked the new post button");
     return{
@@ -118,6 +110,13 @@ export const updatedPost = function(){
     }
 }
 
+export const updateError = function(err){
+    return{
+        type: "UPDATE_POST_ERROR",
+        payload: err
+    }
+}
+
 export const updatePost = function(post){
     return function(dispatch){
         dispatch(updatingPost());
@@ -128,6 +127,9 @@ export const updatePost = function(post){
         })
         .then(function(response){
             dispatch(updatedPost())
+        })
+        .catch(function(err){
+            dispatch(updateError(err));
         })
     }
 }
