@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {fetchPosts, deletePost} from '../actions/index';
+import {fetchPosts, deletePost, updatePostClicked} from '../actions/index';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -14,7 +14,8 @@ class Posts extends Component {
                     <TableRowColumn>{post.id}</TableRowColumn>
                     <TableRowColumn>{post.body}</TableRowColumn>
                     <TableRowColumn>
-                        <RaisedButton label="Delete Post" secondary={true} onClick={this.props.deletePost} onClick={() => this.props.deletePost(post.id)}/>
+                        <RaisedButton label="Update Post" primary={true}  disabled={this.props.posts.isUpdating} onClick={() => this.props.updatePostClicked(post)}/>
+                        <RaisedButton label="Delete Post" secondary={true}  disabled={this.props.posts.isDeleting} onClick={() => this.props.deletePost(post.id)}/>
                     </TableRowColumn>
                 </TableRow>
             );
@@ -28,18 +29,6 @@ class Posts extends Component {
                 </TableRow>
             );
     }
-
-    click(){
-        alert("Clickety!");
-    }
-
-    renderDelete(){
-        if(this.props.posts.posts.length > 0)
-            return(
-                <RaisedButton label="Delete Selected"/>
-            )
-    }
-
 
     render() {
         var text = (this.props.posts.isFetching) ? "Loading" : "Fetch Posts";
@@ -58,7 +47,6 @@ class Posts extends Component {
                     </TableBody>
                 </Table>
                 <RaisedButton label={text} onClick={this.props.fetchPosts}/>
-                {this.renderDelete()}
             </div>
         );
     }
@@ -77,7 +65,8 @@ function mapStateToProps(state) {
 function matchDispatchToProps(dispatch){
     return bindActionCreators({
         fetchPosts: fetchPosts,
-        deletePost: deletePost
+        deletePost: deletePost,
+        updatePostClicked: updatePostClicked
     }, dispatch);
 }
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {saveNewPost,cancelNewPost} from "../actions/index";
+import {updatePostClicked, cancelUpdatePost, updatePost, updateKeyPressed} from "../actions/index";
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -12,7 +12,7 @@ class NewPostDialog extends Component {
         super();
         this.state = {
             empty: true,
-            newPost: ""
+            text: ""
         }
     }
 
@@ -20,24 +20,24 @@ class NewPostDialog extends Component {
         if(e.target.value.length < 1)
             this.setState({
                 empty: true,
-                newPost: e.target.value
+                text: e.target.value
             });
         else
             this.setState({
                 empty: false,
-                newPost: e.target.value
+                text: e.target.value
             });
     }
 
     render() {
-        console.log(this.props.newPost);
+        var text = this.props.editPost.post.body;
         const actions = [
             <FlatButton
                 label="Cancel"
                 primary={true}
                 onTouchTap={() => {
-                    this.setState({ empty: true, newPost:"" });
-                    this.props.cancelNewPost();
+                    this.setState({ empty: true, text:"" });
+                    this.props.cancelUpdatePost();
                 }}
             />,
             <FlatButton
@@ -45,9 +45,12 @@ class NewPostDialog extends Component {
                 primary={true}
                 keyboardFocused={true}
                 onTouchTap={() => {
-                    this.props.saveNewPost(this.state.newPost)
+                    this.props.updatePost({
+                        text: this.state.text,
+                        postId: this.props.editPost.post.id
+                    })
                     this.setState({
-                        newPost: "",
+                        text: "",
                         empty: true,
                     })
                 }}
@@ -57,18 +60,29 @@ class NewPostDialog extends Component {
         return (
             <div>
                 <Dialog
-                title="New Post"
+                title="Update Post"
                 actions={actions}
                 modal={false}
-                open={this.props.newPost.newPost}
+                open={this.props.editPost.newUpdate}
                 onRequestClose={this.handleClose}
+                defaultValue={text}
                 >
                     <TextField
                         ref="textInput"
-                        hintText="New Post"
+                        hintText="New Text"
+                        value={this.state.text}
                         onChange={this.validate.bind(this)}
-                        value={this.state.newPost}
-                    />
+                    >
+                    </TextField>
+                    <hr/>
+                    <h3>Previous Text</h3>
+                    <TextField
+                        ref="textInput"
+                        hintText="New Text"
+                        value={this.props.editPost.post.body}
+                        disabled={true}
+                    >
+                    </TextField>
                 </Dialog>
             </div>
         );
@@ -77,14 +91,15 @@ class NewPostDialog extends Component {
 
 const mapStateToProps = (state) => {
     return{
-        newPost: state.newPost
+        editPost: state.editPost
     }
 }
 
 const matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        saveNewPost: saveNewPost,
-        cancelNewPost: cancelNewPost
+        cancelUpdatePost: cancelUpdatePost,
+        updateKeyPressed: updateKeyPressed,
+        updatePost: updatePost
     }, dispatch);
 }
 

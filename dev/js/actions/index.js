@@ -15,11 +15,24 @@ export const newPostClicked = function(){
     }
 }
 
-export const saveNewPost = (post) => {
+export const savingNewPost = function(){
     console.log("You saved the new post");
     return{
         type: "SAVE_NEW_POST",
+    }
+}
+
+export const savedNewPost = function(post){
+    return{
+        type: "SAVED_NEW_POST",
         payload: post
+    }
+}
+
+export const errorSavingPost = function(err){
+    return{
+        type: "ERROR_SAVING_POST",
+        payload: err
     }
 }
 
@@ -72,6 +85,76 @@ export const deleteError = function(error){
     }
 }
 
+export const updateKeyPressed = function(value){
+    return{
+        type: "EDIT_KEY_PRESSED",
+        payload: value
+    }
+}
+
+export const updatePostClicked = function(post){
+    return{
+        type: "EDIT_POST_CLICKED",
+        payload: post
+    }
+}
+
+export const cancelUpdatePost =  function(){
+    return{
+        type: "CANCEL_UPDATE_POST"
+    }
+}
+
+export const updatingPost = function(post){
+    return{
+        type: "UPDATING_POST",
+        payload: post,
+    }
+}
+
+export const updatedPost = function(){
+    return{
+        type: "UPDATED_POST"
+    }
+}
+
+export const updatePost = function(post){
+    return function(dispatch){
+        dispatch(updatingPost());
+        return axios.put("http://jsonplaceholder.typicode.com/posts/" + post.postId,{
+            data: {
+                body: post.text
+            }
+        })
+        .then(function(response){
+            dispatch(updatedPost())
+        })
+    }
+}
+
+export const saveNewPost = function(text){
+    return function(dispatch){
+        dispatch(savingNewPost());
+        return axios.post('http://jsonplaceholder.typicode.com/posts',{
+           data:{
+                title: 'New Data',
+                body: text,
+                userId: 1
+           }
+        }).then(function(response){
+            var post = {
+                id: response.data.id,
+                body: response.data.data.body
+            }
+            console.log("testfdasdfsdaf",post);
+            dispatch(savedNewPost(post))
+        })
+        .catch(function(err){
+            dispatch(errorSavingPost(err));
+        })
+    }
+}
+
 export const fetchPosts = function(){
     return function(dispatch){
         dispatch(startFetching());
@@ -90,6 +173,7 @@ export const deletePost = function(post){
         dispatch(deletingPost());
         return axios.delete('http://jsonplaceholder.typicode.com/posts/' + post)
         .then(function(){
+            dispatch(deletedPost());
             dispatch(startFetching());
             return axios.get('http://jsonplaceholder.typicode.com/posts');
         })

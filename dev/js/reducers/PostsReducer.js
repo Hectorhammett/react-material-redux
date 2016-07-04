@@ -33,6 +33,17 @@ export default function (state = initialState, action) {
                 isDeleting: true
             }
         }
+        case "DELETED_POST":{
+            return {...state, 
+                isDeleting: false,
+                isDeleted: true
+            }
+        }
+        case 'SAVED_NEW_POST':{
+            return {...state,
+                posts: [action.payload]
+            }
+        }
     }
     return state;
 }

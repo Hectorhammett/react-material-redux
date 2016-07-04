@@ -3,6 +3,7 @@ import UserReducer from './reducer-users';
 import ActiveUserReducer from './reducer-active-user';
 import PostsReducer from "./PostsReducer";
 import NewPostReducer from "./NewPostReducer";
+import EditPostReducer from "./EditPostReducer";
 
 /*
  * We combine all reducers into a single object before updated data is dispatched (sent) to store
@@ -13,7 +14,8 @@ const allReducers = combineReducers({
     users: UserReducer,
     activeUser: ActiveUserReducer,
     posts: PostsReducer,
-    newPost: NewPostReducer
+    newPost: NewPostReducer,
+    editPost: EditPostReducer,
 });
 
 export default allReducers
